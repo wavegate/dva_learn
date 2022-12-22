@@ -13,24 +13,36 @@ export default function Register() {
     formState: { errors },
   } = useForm<RegisterFormData>();
 
-  const { response, error, loading, fetchData } = useFetch();
+  const { response, fetchData } = useFetch();
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
     fetchData("users", "POST", data);
   });
 
   return (
-    <div className="Register">
-      <form onSubmit={onSubmit}>
-        <input type="text" placeholder="Email" {...register("email")}></input>
+    <div className={`container mx-auto mt-12`}>
+      <form onSubmit={onSubmit} className={`flex flex-col gap-4`}>
+        <input
+          type="text"
+          placeholder="Email"
+          {...register("email")}
+          className={`bg-gray-50 border border-gray-300 text-gray-900 rounded-md p-2 px-4 focus:outline-none focus:ring focus:border-blue-500`}
+        ></input>
         <input
           type="text"
           placeholder="Password"
           {...register("password")}
+          className={`bg-gray-50 border border-gray-300 text-gray-900 rounded-md p-2 px-4 focus:outline-none focus:ring focus:border-blue-500`}
         ></input>
-        <button type="submit">Submit</button>
-        {JSON.stringify(response)}
+        <button
+          type="submit"
+          className={`bg-blue-500 text-white rounded-md p-2 px-4 hover:bg-blue-600`}
+        >
+          Submit
+        </button>
+        <div className={`bg-blue-50 p-2 px-4 rounded-md text-blue-700`}>
+          {JSON.stringify(response)}
+        </div>
       </form>
     </div>
   );

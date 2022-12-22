@@ -10,6 +10,7 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const UserRouter_1 = __importDefault(require("./routers/UserRouter"));
+const PostRouter_1 = __importDefault(require("./routers/PostRouter"));
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 const mongodb_uri = process.env.MONGODB_URI;
@@ -24,6 +25,7 @@ app.use((0, cors_1.default)({ origin: ["http://localhost:3000"], credentials: tr
 app.use("/", express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use("/users", UserRouter_1.default);
+app.use("/posts", PostRouter_1.default);
 app.all("*", (req, res) => {
     return res.status(400).json({ error: "Invalid URI" });
 });

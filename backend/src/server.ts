@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import UserRouter from "./routers/UserRouter";
+import PostRouter from "./routers/PostRouter";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/", express.json());
 app.use(cookieParser());
 
 app.use("/users", UserRouter);
+app.use("/posts", PostRouter);
 
 app.all("*", (req: Request, res: Response) => {
   return res.status(400).json({ error: "Invalid URI" });

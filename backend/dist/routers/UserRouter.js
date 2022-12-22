@@ -30,7 +30,7 @@ const UserRouter = express_1.default.Router();
 UserRouter.all("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     switch (req.method) {
         case "GET": {
-            const users = yield User_1.default.find({});
+            const users = yield User_1.default.find({}).populate("posts");
             return res.json({ users: users });
         }
         case "POST": {
@@ -53,6 +53,16 @@ UserRouter.all("/", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                     .json({
                     success: true,
                 });
+            }
+        }
+        case "DELETE": {
+            const userData = req.body;
+            const user = yield User_1.default.findOneAndDelete({ _id: userData._id });
+            if (user) {
+                return res.json({ success: true });
+            }
+            else {
+                return res.status(422).json({ error: "User not found." });
             }
         }
     }

@@ -16,7 +16,7 @@ const UserRouter = express.Router();
 UserRouter.all("/", async (req: Request, res: Response) => {
   switch (req.method) {
     case "GET": {
-      const users = await User.find({});
+      const users = await User.find({}).populate("posts");
       return res.json({ users: users });
     }
     case "POST": {
@@ -38,6 +38,15 @@ UserRouter.all("/", async (req: Request, res: Response) => {
           .json({
             success: true,
           });
+      }
+    }
+    case "DELETE": {
+      const userData = req.body;
+      const user = await User.findOneAndDelete({ _id: userData._id });
+      if (user) {
+        return res.json({ success: true });
+      } else {
+        return res.status(422).json({ error: "User not found." });
       }
     }
   }

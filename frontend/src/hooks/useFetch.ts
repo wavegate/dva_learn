@@ -1,9 +1,7 @@
 import { useState } from "react";
 
 export default function useFetch() {
-  const [error, setError] = useState<string>("");
   const [response, setResponse] = useState<any>(null);
-  const [loading, setLoading] = useState<boolean>(false);
 
   async function fetchData(
     url: string,
@@ -11,11 +9,13 @@ export default function useFetch() {
     data: any = null
   ) {
     try {
-      setLoading(true);
+      setResponse("loading...");
       let fetchResponse;
       switch (method) {
         case "GET": {
-          fetchResponse = await fetch(`http://localhost:5000/${url}`);
+          fetchResponse = await fetch(`http://localhost:5000/${url}`, {
+            credentials: "include",
+          });
           break;
         }
         case "POST": {
@@ -29,17 +29,24 @@ export default function useFetch() {
           });
           break;
         }
+        case "DELETE": {
+          fetchResponse = await fetch(`http://localhost:5000/${url}`, {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+          break;
+        }
       }
-      if (fetchResponse?.ok) {
-        const fetchData = await fetchResponse.json();
-        setResponse(fetchData);
-        setLoading(false);
-      }
+      const fetchData = await fetchResponse?.json();
+      setResponse(fetchData);
     } catch (error) {
-      setError(JSON.stringify(error));
-      setLoading(false);
+      setResponse(JSON.stringify(error));
     }
   }
 
-  return { error, response, loading, fetchData };
+  return { response, fetchData };
 }
